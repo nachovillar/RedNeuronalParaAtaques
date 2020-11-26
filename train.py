@@ -43,6 +43,43 @@ def rand_W(next_nodes, current_nodes):
     w = (random.randint(next_nodes, current_nodes))*2*r - r
     return(w)
 
+def PSO():
+    for (iter=1 to maxIter):
+        new_pFitness, new_beta = fitness (Xe,Ye,Nh,X,Cpinv)
+        pBest,pFitness,gBest,gFintness,wBest =upd_particle(X,pBest,pFitness,gBest,gFintness,new_pFitnes,new_beta,wBest)
+    
+        MSE(iter) = gFitness
+            for (i=1 to Np):
+                for (j=1 to Dim):
+                    z1(1,j) = c1 *rand *(pBest(i,j)-x(i,j))
+                    z2(1,j) = c2 *rand *(pBest(i,j)-x(i,j))
+                
+        V=alpha(iter)*V+z1+z2
+        x=x+V
+    return (gBest ,wBest,MSE)
+
+def upd_particle(X,pBest,pFitness,gBest,gFitness,new_pFitnes,new_beta,wBest):
+    id_x = find (new_pFitnes< pFitness)
+    if (numel (id_x)>0):
+        pFitness (id_x) =new_pFitnes(id_x)
+        pBest (id_x,:) = x(id_x)
+        
+    [new_gFitness, id_x ] = min (pFitness)
+    if (new_gFitness <  gFitness):
+        gFitness = new_gFitness
+        gBest = pBest(id_x,:)
+        wBest = new_beta(id_x,:)
+        
+    return (pBest,pFitness,gBest,gFitness,wBest)
+
+def fitness():
+    [D N] = size (Xe)
+    Np = size (X,1)
+    
+    for (i=1 to Np):
+        p = 
+    
+
 
 print(sqrt(4))
 print(random.randint(0, 1))
