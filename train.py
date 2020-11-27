@@ -41,10 +41,7 @@ def activacion(z):
 def calc_costo(Xe, Ye, w1, bias, w2):
     return
 #Función para inicializar los pesos
-def rand_W(next_nodes, current_nodes):
-    r = sqrt(6/(next_nodes + current_nodes))
-    w = (random.randint(next_nodes, current_nodes))*2*r - r
-    return(w)
+
 
 def PSO():
     for (iter = 1 to maxIter):
@@ -75,14 +72,49 @@ def upd_particle(X,pBest,pFitness,gBest,gFitness,new_pFitnes,new_beta,wBest):
         
     return (pBest,pFitness,gBest,gFitness,wBest)
 
-def fitness():
-    [D N] = size (Xe)
-    Np = size (X,1)
-    
-    for (i=1 to Np):
-        p = 
-    
+def config_swarm(Np, Nh, D, MaxIter, inf):
+  X = ini_swarm(Np, Nh, D)
+  Dim = X.shape[1]
+  pBest = np.zeros((Np, Dim))
+  pFitness = np.ones((1, Dim)) * inf
+  gBest = np.zeros((1, Dim))
+  gFitness = inf
+  wBest = np.zeros((1, Nh))
+  Alpha = generateAlpha(MaxIter)
+  return X, pBest, pFitness, gBest, gFitness, wBest, Alpha
 
+def rand_W(next_nodes, current_nodes):
+  W = np.random.rand(next_nodes, current_nodes)
+  r = np.sqrt(6/(next_nodes + current_nodes))
+  W = W * 2 * r - r
+  return W
+
+def fitness(xe, X):
+  D, N = xe.shape
+  Np = X.shape[0]
+  for i in range(Np):
+    p = X[i]
+    w1 = np.reshape(p, Nh, D)
+    H = Activation(xe, w1)
+    W2[i] = mlp_pinv(H, ye, C)
+    ze = W2[i] * H
+    #MSE(i) = sqrt(mse(ye-ze))
+  return MSE, W2
+
+def loadParamConfig():
+  nh = 41
+  np = 41
+  maxIter = 10
+  c = 0.1
+  return nh, np, maxIter, c
+
+inf = 99999999999
+D, N = xe.shape
+Xe = np.ones((1, N))
+D, M = xv.shape
+Xv = np.ones((1, M))
+Nh, Np, maxIter, C = loadParamConfig()
+X, pBest, pFitness, gBest, gFitness, wBest, Alpha = config_swarm(Np, Nh, D, maxIter, inf)
 
 print(sqrt(4))
 print(random.randint(0, 1))
