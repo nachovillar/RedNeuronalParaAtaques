@@ -2,7 +2,7 @@
 from train_input import dataMatrix
 from functions import activation
 # from param_config import Xe, Ye, L, C
-from numpy import random, shape, sqrt, matlib, transpose
+from numpy import random, shape, sqrt, matlib, transpose, exp
 # Librería para acceder a la inversa de las matrices
 from scipy import linalg
 #Matriz con los datos de entrada
@@ -18,10 +18,10 @@ sizeXe = xe.shape
 
 #params: Data de entrada, Data salida, Nodos ocultos, Penalidad pseudo inversa
 def upd_pesos (Xe, Ye, L, C):
-    [nodos_entrada, caracteristicas] = sizeXe
-    w1 = rand_W(L, nodos_entrada) #Peso Oculto del último nodo de entrada hacia el último nodo oculto I GUESS
-    bias = rand_W(L, 1) #Sesgo--> peso oculto del primer nodo de entrada hacia el último nodo oculto I GUESS
-    biasMatrix = matlib.repmat(bias, nodos_entrada, caracteristicas) #Matriz de pesos ocultos
+    [nodos_entrada, caracteristicas] = sizeXe # numero de nodos de entrada, atributos del nodo de entrada
+    w1 = rand_W(L, nodos_entrada) #Matriz de pesos ocultos
+    bias = rand_W(L, 1) #Sesgo
+    biasMatrix = matlib.repmat(bias, 1, caracteristicas) #Matriz de pesos ocultos
 
     z = w1*xe + biasMatrix
     H = activation(z)
@@ -35,6 +35,9 @@ def upd_pesos (Xe, Ye, L, C):
 
     return(w1, bias, w2) 
 
+def activacion(z):
+    return ((2/(1+ exp(-z)))-1)
+
 def calc_costo(Xe, Ye, w1, bias, w2):
     return
 #Función para inicializar los pesos
@@ -44,9 +47,9 @@ def rand_W(next_nodes, current_nodes):
     return(w)
 
 def PSO():
-    for (iter=1 to maxIter):
-        new_pFitness, new_beta = fitness (Xe,Ye,Nh,X,Cpinv)
-        pBest,pFitness,gBest,gFintness,wBest =upd_particle(X,pBest,pFitness,gBest,gFintness,new_pFitnes,new_beta,wBest)
+    for (iter = 1 to maxIter):
+        new_pFitness, new_beta = fitness(Xe,Ye,Nh,X,Cpinv)
+        pBest,pFitness,gBest,gFintness,wBest = upd_particle(X,pBest,pFitness,gBest,gFintness,new_pFitnes,new_beta,wBest)
     
         MSE(iter) = gFitness
             for (i=1 to Np):
