@@ -1,6 +1,5 @@
-#Importamos la data como matriz y como frame
+# Importamos la data como matriz y como frame
 from train_input import ye, xe
-from functions import activation
 # from param_config import Xe, Ye, L, C
 from numpy import random, shape, sqrt, matlib, transpose, exp, eye
 # Librería para acceder a la inversa de las matrices
@@ -8,50 +7,56 @@ from scipy import linalg
 from param_config import *
 
 
-#Función para inicializar los pesos
-def rand_W(next_nodes, current_nodes):
-  r = sqrt(6/(next_nodes + current_nodes))
-  w = random.rand(next_nodes, current_nodes)
-  w = (w * 2 * r) - r
-  return w
-#params: Data de entrada, Data salida, Nodos ocultos, Penalidad pseudo inversa
-def upd_pesos(Xe, Ye, L, C):
-    [nodos_entrada, caracteristicas] = Xe.shape # numero de nodos de entrada, atributos del nodo de entrada
-    w1 = rand_W(L, nodos_entrada) #Matriz de pesos ocultos
-    bias = rand_W(L, 1) #Sesgo
-    biasMatrix = matlib.repmat(bias, 1, caracteristicas) #Matriz para sumarle el sesgo a todos los pesos
+def activation(Xe, W1):
+    z = W1*Xe
 
-    z = w1*Xe + biasMatrix
+    return ((2 / (1 + exp(-z))) - 1)
+
+
+# Función para inicializar los pesos
+def rand_W(next_nodes, current_nodes):
+    r = sqrt(6 / (next_nodes + current_nodes))
+    w = random.rand(next_nodes, current_nodes)
+    w = (w * 2 * r) - r
+    return w
+
+
+# params: Data de entrada, Data salida, Nodos ocultos, Penalidad pseudo inversa
+def upd_pesos(Xe, Ye, L, C):
+    [nodos_entrada, caracteristicas] = Xe.shape  # numero de nodos de entrada, atributos del nodo de entrada
+    w1 = rand_W(L, nodos_entrada)  # Matriz de pesos ocultos
+    bias = rand_W(L, 1)  # Sesgo
+    biasMatrix = matlib.repmat(bias, 1, caracteristicas)  # Matriz para sumarle el sesgo a todos los pesos
+    print(Ye)
+    z = w1 * Xe + biasMatrix
     H = activation(z)
-    Htrnaspose = transpose(H)
-    #Se calculan los pesos de salida
-    yh = Ye*Htrnaspose
-    hh = (H*Htrnaspose + eye(L)/C)
+    Htranspose = transpose(H)
+    # Se calculan los pesos de salida
+    yh = Ye * Htranspose
+    hh = (H * Htranspose + eye(L) / C)
 
     inverse = linalg.inv(hh)
-    w2 = yh*inverse #Pesos de Salida
-    #Retornamos los pesos ocultos, sesgo y pesos de salida
-    return(w1, bias, w2) 
-
-    
+    w2 = yh * inverse  # Pesos de Salida
+    # Retornamos los pesos ocultos, sesgo y pesos de salida
+    return [w1, bias, w2]
 
 
-w1, bias, w2 = upd_pesos(xe, ye, NODOS_OCULTOS, PENALIDAD_P_INVERSA)
+[w1, bias, w2] = upd_pesos(xe, ye, NODOS_OCULTOS, PENALIDAD_P_INVERSA)
 w1.to_csv('matriz_pesos_ocultos.csv', sep=',')
-w2.to_csv('matriz_pesos_salida.csv', sep = ',')
+w2.to_csv('matriz_pesos_salida.csv', sep=',')
 bias.to_csv('sesgo.csv')
 
 # def PSO():
 #     for (iter = 1 to maxIter):
 #         new_pFitness, new_beta = fitness(Xe,Ye,Nh,X,Cpinv)
 #         pBest,pFitness,gBest,gFintness,wBest = upd_particle(X,pBest,pFitness,gBest,gFintness,new_pFitnes,new_beta,wBest)
-    
+
 #         MSE(iter) = gFitness
 #             for (i=1 to Np):
 #                 for (j=1 to Dim):
 #                     z1(1,j) = c1 *rand *(pBest(i,j)-x(i,j))
 #                     z2(1,j) = c2 *rand *(pBest(i,j)-x(i,j))
-                
+
 #         V=alpha(iter)*V+z1+z2
 #         x=x+V
 #     return (gBest ,wBest,MSE)
@@ -61,13 +66,13 @@ bias.to_csv('sesgo.csv')
 #     if (numel (id_x)>0):
 #         pFitness (id_x) =new_pFitnes(id_x)
 #         pBest (id_x,:) = x(id_x)
-        
+
 #     [new_gFitness, id_x ] = min (pFitness)
 #     if (new_gFitness <  gFitness):
 #         gFitness = new_gFitness
 #         gBest = pBest(id_x,:)
 #         wBest = new_beta(id_x,:)
-        
+
 #     return (pBest,pFitness,gBest,gFitness,wBest)
 
 # def config_swarm(Np, Nh, D, MaxIter, inf):
@@ -80,7 +85,6 @@ bias.to_csv('sesgo.csv')
 #   wBest = np.zeros((1, Nh))
 #   Alpha = generateAlpha(MaxIter)
 #   return X, pBest, pFitness, gBest, gFitness, wBest, Alpha
-
 
 
 # def fitness(xe, X):
