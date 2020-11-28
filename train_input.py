@@ -1,7 +1,7 @@
 # librería para trabajar con matrices
 from numpy import matrix
-import numpy
-from numpy import shape
+import numpy as np
+from numpy import shape, matlib
 # Librería para acceder a la inversa de las matrices
 from scipy import linalg
 # Librería para el manejo de archivos .csv
@@ -13,7 +13,7 @@ dataMatrix = matrix(dataFrame)
 
 # print(dataMatrix)
 
-print(numpy.exp(1))
+print(np.exp(1))
 # libreria para trabajar con matrices
 from numpy import matrix, random
 # LibrerÃia para acceder a la inversa de las matrices
@@ -38,4 +38,12 @@ for i in range(len(yeDataFrame)):
 
 ye = matrix(yeDataFrame)
 xe = matrix(xeDataFrame)
+
+
+
+
+###########################################
+
+
+
 
