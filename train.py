@@ -1,27 +1,21 @@
 #Importamos la data como matriz y como frame
-from train_input import dataMatrix
+from train_input import ye, xe
 from functions import activation
 # from param_config import Xe, Ye, L, C
 from numpy import random, shape, sqrt, matlib, transpose, exp
 # Librería para acceder a la inversa de las matrices
 from scipy import linalg
-#Matriz con los datos de entrada
-xe = dataMatrix
-#Dimensión de los datos de entrada
-sizeXe = xe.shape
-# FALTA CARGAR YE, L y C!!!!
-# [w1, bias, w2] = upd_pesos(xeMatrix, Ye, L, C)
-# costo = calc_costo(xeMatrix)
+from param_config import *
 
-
+[w1, bias, w2] = upd_pesos(xe, ye, NODOS_OCULTOS, PENALIDAD_P_INVERSA)
 
 
 #params: Data de entrada, Data salida, Nodos ocultos, Penalidad pseudo inversa
 def upd_pesos (Xe, Ye, L, C):
-    [nodos_entrada, caracteristicas] = sizeXe # numero de nodos de entrada, atributos del nodo de entrada
+    [nodos_entrada, caracteristicas] = Xe.shape # numero de nodos de entrada, atributos del nodo de entrada
     w1 = rand_W(L, nodos_entrada) #Matriz de pesos ocultos
     bias = rand_W(L, 1) #Sesgo
-    biasMatrix = matlib.repmat(bias, 1, caracteristicas) #Matriz de pesos ocultos
+    biasMatrix = matlib.repmat(bias, 1, caracteristicas) #Matriz para sumarle el sesgo a todos los pesos
 
     z = w1*xe + biasMatrix
     H = activation(z)
@@ -35,13 +29,16 @@ def upd_pesos (Xe, Ye, L, C):
 
     return(w1, bias, w2) 
 
-def activacion(z):
-    return ((2/(1+ exp(-z)))-1)
+    
 
 def calc_costo(Xe, Ye, w1, bias, w2):
     return
 #Función para inicializar los pesos
-
+def rand_W(next_nodes, current_nodes):
+  W = np.random.rand(next_nodes, current_nodes)
+  r = np.sqrt(6/(next_nodes + current_nodes))
+  W = W * 2 * r - r
+  return W
 
 def PSO():
     for (iter = 1 to maxIter):
@@ -83,11 +80,7 @@ def config_swarm(Np, Nh, D, MaxIter, inf):
   Alpha = generateAlpha(MaxIter)
   return X, pBest, pFitness, gBest, gFitness, wBest, Alpha
 
-def rand_W(next_nodes, current_nodes):
-  W = np.random.rand(next_nodes, current_nodes)
-  r = np.sqrt(6/(next_nodes + current_nodes))
-  W = W * 2 * r - r
-  return W
+
 
 def fitness(xe, X):
   D, N = xe.shape
