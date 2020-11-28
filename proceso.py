@@ -2,38 +2,45 @@ import pandas as pd
 import numpy as np
 from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
+from numpy import matrix
 
 
-trainData = pd.read_csv('data/KDDTrain+_20Percent.txt', sep=',')
-testData = pd.read_csv('data/KDDTest+.txt', sep=',')
+trainData = pd.read_csv('data/KDDTrain+_20Percent.txt', sep=',', header = None)
+testData = pd.read_csv('data/KDDTest+.txt', sep=',', header = None)
 
 a = 0.1
 b = 0.99
 
 encoder = preprocessing.LabelEncoder()
 
-for col in range(1, 3):
+
+for col in range(1, 4):
     trainData[col] = encoder.fit_transform(trainData[col])
     testData[col] = encoder.fit_transform(testData[col])
 
-if trainData[41] == 'normal':
-    trainData[41] = 1
-else:
-    trainData[41] = -1
 
-if testData[41] == 'normal':
-    testData[41] = 1
-else:
-    trainData[41] = -1
+trainData[41] = trainData[41] == 'normal'
+trainData[41] = trainData[41].replace(True, 1)
+trainData[41] = trainData[41].replace(0, -1)
 
-xeTrain = trainData.loc[:, 40]
-xeTest = testData.loc[:, 40]
+testData[41] = testData[41] == 'normal'
+testData[41] = testData[41].replace(True, 1)
+testData[41] = testData[41].replace(False, -1)
 
+
+xeTrain = trainData.loc[:, :40]
+xeTest = testData.loc[:, :40]
+
+print(xeTrain)
 norm_xeTrain = (b - a) * ((xeTrain - xeTrain.min()) / (xeTrain.max() - xeTrain.min())) + a
 norm_xeTest = (b - a) * ((xeTest - xeTest.min()) / (xeTest.max() - xeTest.min())) + a
 
-kddtrain = norm_xeTrain.join(trainData.loc[41, 42])
-kddtest = norm_xeTest.join(testData.loc[41, 42])
+print(norm_xeTrain)
 
-kddtrain.to_csv('kddtrain.txt', sep=',')
-kddtest.to_csv('kddtest.txt', sep=',')
+
+kddtrain = norm_xeTrain.join(trainData.loc[:, 41:])
+kddtest = norm_xeTest.join(testData.loc[:, 41:])
+
+print(kddtrain)
+kddtrain.to_csv('data/kddtrain.txt', sep=',', header = None, index = False)
+kddtest.to_csv('data/kddtest.txt', sep=',', header = None, index = False)
