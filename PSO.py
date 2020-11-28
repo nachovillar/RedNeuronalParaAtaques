@@ -6,7 +6,6 @@ Created on Sat Nov 28 16:13:28 2020
 """
 #Importamos la data como matriz y como frame
 from train_input import ye, xe
-from functions import activation
 # from param_config import Xe, Ye, L, C
 from numpy import random, shape, sqrt, matlib, transpose, exp, eye
 # Librería para acceder a la inversa de las matrices
@@ -51,21 +50,21 @@ def _ini_config_swarm(self,PARTICULAS, NODOS_OCULTOS,):
 def PSO(self):
     iter=0
     _ini_config_swarm()
-    for ( iter=1 to range(self.maxIter)):
+    for iter in range(self.maxIter):
          new_pFitness, newBeta = self.fitness()
-         pBest, pFitness, gBest, gFitness, wBest = self.upd_particle(self.X, pBest, pFitness, gBest,
-                                                                gFitness,new_pFitness, newBeta, wBest)
+         pBest, pFitness, gBest, gFitness, wBest = self.upd_particle(self.X, pBest, pFitness, gBest,gFitness,new_pFitness, newBeta, wBest)
 
-         MSE[iter] = gFitness
-   
-             for (i=1 to Np):
-                 for (j=1 to Dim):
-                     z1[1,j] = c1 *rand *(pBest[i,j]-x[i,j])# local
-                     z2[1,j] = c2 *rand *(pBest[i,j]-x[i,j])# global
+   MSE[iter] = gFitness
+   i=1
+   j=1
+    for i in Np:
+        for j=1 in Dim:
+            z1[1,j] = c1 *rand *(pBest[i,j]-x[i,j])# local
+            z2[1,j] = c2 *rand *(pBest[i,j]-x[i,j])# global
                
-         V=alpha(iter)*V+z1+z2
-         x=x+V
-     return (gBest ,wBest,MSE)
+    V=alpha(iter)*V+z1+z2
+    x=x+V
+    return (gBest ,wBest,MSE)
  
 # funcion de costo 
 def fitness(self):  
