@@ -51,14 +51,14 @@ def PSO(self):
     iter=0
     _ini_config_swarm()
     for iter in range(self.maxIter):
-         new_pFitness, newBeta = self.fitness()
-         pBest, pFitness, gBest, gFitness, wBest = self.upd_particle(self.X, pBest, pFitness, gBest,gFitness,new_pFitness, newBeta, wBest)
+        new_pFitness, newBeta = self.fitness()
+        pBest, pFitness, gBest, gFitness, wBest = self.upd_particle(self.X, pBest, pFitness, gBest,gFitness,new_pFitness, newBeta, wBest)
 
-   MSE[iter] = gFitness
-   i=1
-   j=1
+    MSE[iter] = gFitness
+    i=1
+    j=1
     for i in Np:
-        for j=1 in Dim:
+        for j in Dim:
             z1[1,j] = c1 *rand *(pBest[i,j]-x[i,j])# local
             z2[1,j] = c2 *rand *(pBest[i,j]-x[i,j])# global
                
@@ -103,12 +103,12 @@ def upd_particle(self, X, pBest,pFitness, gBest, gFitness, New_pFitness, newBeta
 
     return pBest, pFitness, gBest, gFitness, wBest
 #aun no entiendo que valor tiene m y como se mueve j
-def activation (x,w):
-    z=0
-    for i =1 to m:
-        z= z+ x[n,i]*w[j,i]
-    h=((2/(1+ exp(-z)))-1)
-    return h
+#def activation (x,w):
+#    z=0
+#    for i =1 to m:
+#        z= z+ x[n,i]*w[j,i]
+#    h=((2/(1+ exp(-z)))-1)
+#    return h
 
 
 
