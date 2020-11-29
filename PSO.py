@@ -5,7 +5,7 @@ Created on Sat Nov 28 16:13:28 2020
 @author: coott
 """
 #Importamos la data como matriz y como frame
-from train_input import ye, xe
+
 # from param_config import Xe, Ye, L, C
 from numpy import random, shape, sqrt, matlib, transpose, exp, eye
 # Librería para acceder a la inversa de las matrices
@@ -14,6 +14,7 @@ from param_config import *
 import numpy as np
 import math
 from sklearn.metrics import mean_squared_error as mse
+import random as rd
 
 
 
@@ -30,9 +31,21 @@ def __init__(self, D, xe, ye, C):
 
     #Inicializacion de la poblacion
     self.ini_swarm(PARTICULAS,NODOS_OCULTOS,D)
+    
+def ini_swarm(self, PARTICULAS, NODOS_OCULTOS, D):
+    self.np = PARTICULAS
+    self.nh = NODOS_OCULTOS
+
+    dim = self.nh*D  
+    X = np.zeros( (self.np, dim), dtype=float) 
+
+    for i in range(self.np):
+        wh = self.rand_w(self.nh, D)
+        a = np.reshape(wh, (1, dim))
+        X[i]= a
+        self.X = X 
 
 def _ini_config_swarm(self,PARTICULAS, NODOS_OCULTOS,):
-        iter = 0
         alfa = np.zeros(self.maxIter)
         amax=0.95
         amin=0.1
@@ -55,12 +68,12 @@ def PSO(self):
         pBest, pFitness, gBest, gFitness, wBest = self.upd_particle(self.X, pBest, pFitness, gBest,gFitness,new_pFitness, newBeta, wBest)
 
     MSE[iter] = gFitness
-    i=1
-    j=1
-    for i in Np:
-        for j in Dim:
-            z1[1,j] = c1 *rand *(pBest[i,j]-x[i,j])# local
-            z2[1,j] = c2 *rand *(pBest[i,j]-x[i,j])# global
+    c1=1.05* rd.ramdom()
+    c2=2.95 * rd.ramdom()
+    for i in self.np:
+        for j in self.D:
+            z1[1,j] = c1*(pBest[i,j]-self.X[i,j])# local
+            z2[1,j] = c2 *(pBest[i,j]-self.X[i,j])# global
                
     V=alpha(iter)*V+z1+z2
     x=x+V
@@ -103,12 +116,16 @@ def upd_particle(self, X, pBest,pFitness, gBest, gFitness, New_pFitness, newBeta
 
     return pBest, pFitness, gBest, gFitness, wBest
 #aun no entiendo que valor tiene m y como se mueve j
-#def activation (x,w):
-#    z=0
-#    for i =1 to m:
-#        z= z+ x[n,i]*w[j,i]
-#    h=((2/(1+ exp(-z)))-1)
-#    return h
+def activation (x,w):
+    z=w*x
+    h=((2/(1+ exp(-z)))-1)
+    return h
+
+def rand_W(next_nodes, current_nodes):
+    r = sqrt(6 / (next_nodes + current_nodes))
+    w = random.rand(next_nodes, current_nodes)
+    w = (w * 2 * r) - r
+    return w
 
 
 
