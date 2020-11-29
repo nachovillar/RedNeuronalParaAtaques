@@ -3,7 +3,7 @@ from numpy import matrix, shape
 # Librería para el manejo de archivos .csv
 import pandas as pd
 
-#data entrenamiento
+#data test
 dataFrameTrain = pd.read_csv('data/kddtest.txt', header=None, sep = ',')
 
 yeDataFrame = dataFrameTrain[41]

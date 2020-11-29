@@ -1,15 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Nov 28 16:13:28 2020
-
-@author: coott
-"""
-#Importamos la data como matriz y como frame
-
-# from param_config import Xe, Ye, L, C
 from numpy import random, shape, sqrt, matlib, transpose, exp, eye
-# Librería para acceder a la inversa de las matrices
-from scipy import linalg
 from param_config import *
 import numpy as np
 import math
@@ -19,7 +8,7 @@ import random as rd
 class PSO:
     
 
-    def __init__(self, D, xe, ye, C):
+    def __init__(self, D, xe, ye):
         self.maxIter = MAX_ITERACIONES
         self.np = PARTICULAS
         self.nh = NODOS_OCULTOS
@@ -27,7 +16,7 @@ class PSO:
         self.D = D
         self.xe = xe  
         self.ye = ye
-        self.C = C
+        self.C = PENALIDAD_P_INVERSA
         self.w1 = None
     
         #Inicializacion de la poblacion

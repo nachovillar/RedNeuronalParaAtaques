@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Nov 28 21:43:37 2020
-
-@author: coott
-"""
-
 import numpy as np
 import pandas as pd
 from sklearn.metrics import f1_score
