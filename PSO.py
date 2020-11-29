@@ -45,24 +45,24 @@ def ini_swarm(self, PARTICULAS, NODOS_OCULTOS, D):
         X[i]= a
         self.X = X 
 
-def _ini_config_swarm(self,PARTICULAS, NODOS_OCULTOS,):
-        alfa = np.zeros(self.maxIter)
-        amax=0.95
-        amin=0.1
-        for p in range(self.maxIter):
-            alfa[p] = amax- ((amax - amin)/self.maxIter)*p
-            
-        pBest = np.zeros((self.np, self.D*self.nh))
-        pFitness = np.ones(self.np)*100000
-        gBest = np.ones(self.D*self.nh)
-        wBest = np.zeros(self.nh)
-        gFitness = 1000000000
-        MSE = np.zeros((self.maxIter))
+
+
 
 #PRoceso de aprendizaje
 def PSO(self):
-    iter=0
-    _ini_config_swarm()
+    alfa = np.zeros(self.maxIter)
+    amax=0.95
+    amin=0.1
+    for p in range(self.maxIter):
+        alfa[p] = amax- ((amax - amin)/self.maxIter)*p
+        
+    pBest = np.zeros((self.np, self.D*self.nh))
+    pFitness = np.ones(self.np)*100000
+    gBest = np.ones(self.D*self.nh)
+    wBest = np.zeros(self.nh)
+    gFitness = 1000000000
+    MSE = np.zeros((self.maxIter))
+
     for iter in range(self.maxIter):
         new_pFitness, newBeta = self.fitness()
         pBest, pFitness, gBest, gFitness, wBest = self.upd_particle(self.X, pBest, pFitness, gBest,gFitness,new_pFitness, newBeta, wBest)
@@ -75,10 +75,12 @@ def PSO(self):
             z1[1,j] = c1*(pBest[i,j]-self.X[i,j])# local
             z2[1,j] = c2 *(pBest[i,j]-self.X[i,j])# global
                
-    V=alpha(iter)*V+z1+z2
-    x=x+V
+    V=self.alpha(iter)*V+z1+z2
+    self.X=self.X+V
     return (gBest ,wBest,MSE)
- 
+
+    
+#--------------------------------------------------------------
 # funcion de costo 
 def fitness(self):  
     w2 = np.zeros((self.np, self.nh), dtype=float)
@@ -91,6 +93,9 @@ def fitness(self):
         ze = np.matmul(w2[i],H)
         MSE[i] = math.sqrt(mse(self.ye, ze))
     return MSE, w2
+
+
+#--------------------------------------------------------------
 #Pesos de salida, usando seudo inversa
 def mlp_pinv(self, H):
     L,N = H.shape
@@ -101,7 +106,7 @@ def mlp_pinv(self, H):
 
     return w2
 
-
+#--------------------------------------------------------------
 def upd_particle(self, X, pBest,pFitness, gBest, gFitness, New_pFitness, newBeta, wBest):
     for i in range(self.np):
         if (New_pFitness[i] < pFitness[i]):
@@ -115,6 +120,8 @@ def upd_particle(self, X, pBest,pFitness, gBest, gFitness, New_pFitness, newBeta
         wBest = newBeta[idx][:]
 
     return pBest, pFitness, gBest, gFitness, wBest
+
+#--------------------------------------------------------------
 #aun no entiendo que valor tiene m y como se mueve j
 def activation (x,w):
     z=w*x
