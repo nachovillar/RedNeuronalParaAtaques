@@ -3,6 +3,12 @@ import numpy as np
 # Librería para el manejo de archivos .csv
 import pandas as pd
 from test_input import yv, xv
+from numpy import hstack, ones, append
+from PSO import *
+
+
+#carga los datas de test
+
 
 D, N = xv.shape
 bias = ones((1, N))
@@ -12,12 +18,18 @@ Xe = append(xv, bias, axis=0)
 pso = PSO(D+1, Xe, yv)
 gBest, wBest, MSE = pso.PSO()
 
-z = forward(xv, w1, bias, w2)
+
+
+
+
 accuracy, Fscore = metrica(z, ye)
 
 print (accuracy)
 print (Fscore)
-#falta cargar los pesos 
+
+fscore = pd.DataFrame (Fscore,accuracy)
+fscore.to_csv('data/fscore.txt', sep=',')
+
 
 
 
