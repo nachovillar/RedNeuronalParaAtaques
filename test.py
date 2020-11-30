@@ -7,7 +7,8 @@ from numpy import hstack, ones, append
 from PSO import *
 
 
-#carga los datas de test
+#carga los datas de test, y se importan del test_input
+
 
 
 D, N = xv.shape
@@ -20,6 +21,10 @@ gBest, wBest, MSE = pso.PSO()
 
 
 
+#cargan los datos ya entrenados
+DataFrameW1= pd.read('data/gBest.txt', sep=',')
+DataFrameW2 = pd.read('data/wBest.txt', sep=',')
+DtaFrameMSE = pd.read('data/MSE.txt', sep=',')
 
 
 accuracy, Fscore = metrica(z, ye)
@@ -56,3 +61,9 @@ def metrica(yh, yo):
     f_score = 2/ ((1/recall)+(1/precision))
     
     return precision, f_score
+
+def activation (self, x, w):
+    z = np.dot(w, x)
+    h = ((2/(1+ exp(-z)))-1)
+
+    return h

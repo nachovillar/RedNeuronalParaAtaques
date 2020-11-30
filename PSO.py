@@ -70,8 +70,8 @@ class PSO:
         
     #--------------------------------------------------------------
     # funcion de costo 
-    def fitness(self):  
-
+    def fitness(self):
+        w2 = np.zeros((self.np, self.nh), dtype=float)
         MSE = np.zeros(self.np , dtype=float)
         for i in range(self.np):
 
@@ -79,14 +79,15 @@ class PSO:
 
 
             w1 = np.reshape(p, (self.nh, self.D))
-
+            z = np.matmul(w1, self.xe, dtype = float)
+            #print(z)
             #trasnformo a una matriz de los pesos ocultos
-            H = self.activation(self.xe, w1)# @h = matris =nodo_ocultodo x muestra de entrenamiento
+            H = self.activation(z)# @h = matris =nodo_ocultodo x muestra de entrenamiento
 
-            w2 = self.mlp_pinv(H,  self.ye[0, i])
-            ze = np.dot(w2, H)
-            print(ze)
-            MSE[i] = sqrt(mse(self.ye[0, i], ze))
+            w2[i] = self.mlp_pinv(H,  self.ye)
+            ze = np.matmul(w2, H)
+
+            MSE[i] = sqrt(mse(self.ye, ze))
 
         return MSE, w2
     
@@ -95,14 +96,14 @@ class PSO:
     #Pesos de salida, usando seudo inversa
     def mlp_pinv(self, H, ye):
         L, N = H.shape
-        yh = np.dot(ye, np.transpose(H))
+        yh = np.matmul(ye, np.transpose(H))
+        #print(yh.shape)
+        hh = np.matmul(H, np.transpose(H))
+        #print(hh.shape)
+        hh = hh + (np.eye(L)/self.C)
+        #print(hh.shape)
+        w2 = np.matmul(yh, np.linalg.pinv(hh))
 
-        hh = np.dot(H, np.transpose(H))
-
-        hh = hh + (np.dot(np.eye(L), ((self.C)^-1)))
-
-        w2 = np.dot(yh, np.linalg.inv(hh))
-    
         return w2
     
     #--------------------------------------------------------------
@@ -121,19 +122,16 @@ class PSO:
         return pBest, pFitness, gBest, gFitness, wBest
     
     
-    #aun no entiendo que valor tiene m y como se mueve j
-    def activation (self, x, w):
-        z = np.dot(w, x)
-        h = ((2/(1+ exp(-z)))-1)
+
+    def activation (self, z):
+        h = ((2/(1 + exp(-z)))-1)
 
         return h
-    
+
     def rand_w(self, next_nodes, current_nodes):
         r = sqrt(6 / (next_nodes + current_nodes))
         w = random.rand(next_nodes, current_nodes)
         w = (w * 2 * r) - r
         return w
-
-
 
     
